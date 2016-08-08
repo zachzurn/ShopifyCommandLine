@@ -1,0 +1,6 @@
+shopify.json
+bin
+*.exe
+shopify-dev
+shopify-production
+shopify-staging
