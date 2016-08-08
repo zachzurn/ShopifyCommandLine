@@ -19,12 +19,12 @@ Functionality
 
 Directory structure
 
-Root Folder
-|--shopify.json
-|--shopify-dev (The name of this folder is set in the shopify.json stores section under the 'folder' field)
-|--shopify-staging (The name of this folder is set in the shopify.json stores section under the 'folder' field)
-|--shopify-production (The name of this folder is set in the shopify.json stores section under the 'folder' field)
-|--shopify.exe (I put the executable inside the folder, but you can run it from anywhere as long as you run the command from inside the root folder)
+    Root Folder
+    |--shopify.json
+    |--shopify-dev (The name of this folder is set in the shopify.json stores section under the 'folder' field)
+    |--shopify-staging (The name of this folder is set in the shopify.json stores section under the 'folder' field)
+    |--shopify-production (The name of this folder is set in the shopify.json stores section under the 'folder' field)
+    |--shopify.exe (I put the executable inside the folder, but you can run it from anywhere as long as you run the command from inside the root folder)
 
 To configure your stores, you will need to create a shopify.json file that looks like the one below.
 
