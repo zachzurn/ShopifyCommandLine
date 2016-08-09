@@ -222,10 +222,15 @@ func (s *Store) deleteRemoteAsset(pth string) {
     pth = strings.Replace(pth,`\`,`/`,-1)
     assetKey, err := filepath.Rel(s.Folder, pth)
     assetName := filepath.Base(assetKey)
+    assetExt := filepath.Ext(assetName)
     
     if err != nil{
         
-    } 
+    }
+
+    if !extensionAllowed(assetExt) {
+        return;
+    }
 
     err = s.Api.Delete(s.ThemeId,strings.Replace(assetKey,`\`,`/`,-1))
 
@@ -306,7 +311,7 @@ Ensure the store is valid by checking that the correct parameters exist
 func (s *Store) validate(storeKey string){
     
     if s.Name == "" {
-        fmt.Printf("%v Store '%s' is missing the 'name' field. Enter in the name for the target.\n",StrError,StrError,ansi.Color(storeKey, "134"))
+        fmt.Printf("%v Store '%s' is missing the 'name' field. Enter in the name for the target.\n",StrError,ansi.Color(storeKey, "134"))
         os.Exit(1)
     }
 
