@@ -1,35 +1,13 @@
-# Go Shopify Tools
+# Shopify Tools
 
-Go Shopify Tools is a Go project that provides tools for editing assets on shopify stores.
+Shopify Tools is a project that provides tools for editing assets on shopify stores. Shopify Tools is written in the Go programming language.
+
+Download ---  [Win](https://github.com/zachzurn/go_shopify_tools/releases/download/v0.1/shopify.exe "Shopify Tools Windows")  ---  [Mac](https://github.com/zachzurn/go_shopify_tools/releases/download/v0.1/shopify "Shopify Tools Windows")
+
 
 ![go shopify tools](https://github.com/zachzurn/go_shopify_tools/raw/master/img/go_shopify_tools.png)
 
-### Functionality
-  - Configure dev, test and staging stores [DONE]
-  - Download entire theme [DONE]
-  - Watch for file changes and upload to shopify [DONE]
-  - Safe Deploy files to Shopify for a theme with incremental upload/deletes and deploy preview [NOT IMPLEMENTED]
-  - Force Deploy all files to shopify with no confirmation. For automated use. [NOT IMPLEMENTED]
-  - Deploy one store's theme to another store with 'source deploy target' command [NOT IMPLEMENTED] 
-  - Copy products from one store to another [NOT IMPLEMENTED]
-  - Import products using a JSON file [NOT IMPLEMENTED]
-  - Encrypt and Decrypt shopify.json with password using 'settings lock' and 'settings unlock'. [NOT IMPLEMENTED]
-
-### Download
-
-| [Win](https://github.com/zachzurn/go_shopify_tools/releases/download/v0.1/shopify.exe "Shopify Tools Windows") | --- | [Mac](https://github.com/zachzurn/go_shopify_tools/releases/download/v0.1/shopify "Shopify Tools Windows") |
-
 ### How to use
-
-Directory structure
-
-Project Folder  
-&nbsp;&nbsp;|--shopify.json  
-&nbsp;&nbsp;|--shopify-dev (The name of this folder is set in the shopify.json stores section under the 'folder' field)  
-&nbsp;&nbsp;|--shopify-staging (The name of this folder is set in the shopify.json stores section under the 'folder' field)  
-&nbsp;&nbsp;|--shopify-production (The name of this folder is set in the shopify.json stores section under the 'folder' field)  
-&nbsp;&nbsp;|--shopify.exe (I put the executable inside the folder, but you can run it from anywhere as long as you run the command from inside the root folder)  
-
 
 To configure your stores, you will need to create a shopify.json file that looks like the one below.
 
@@ -77,9 +55,29 @@ Downloads the entire theme to the folder specified in the "folder" field.
     
     download [store] //Windows Example ./shopify.exe download production
 
+**Example folder structure using the above configuration.**
+
+Project Folder  
+&nbsp;&nbsp;|--shopify.json  
+&nbsp;&nbsp;|--shopify-dev  
+&nbsp;&nbsp;|--shopify-staging   
+&nbsp;&nbsp;|--shopify-production  
+&nbsp;&nbsp;|--shopify.exe  
+
 ### Development
 
 Want to contribute?
+
+  - Configure dev, test and staging stores [DONE]
+  - Download entire theme [DONE]
+  - Watch for file changes and upload to shopify [DONE]
+  - Safe Deploy files to Shopify for a theme with incremental upload/deletes and deploy preview [NOT IMPLEMENTED]
+  - Force Deploy all files to shopify with no confirmation. For automated use. [NOT IMPLEMENTED]
+  - Deploy one store's theme to another store with 'source deploy target' command [NOT IMPLEMENTED] 
+  - Copy products from one store to another [NOT IMPLEMENTED]
+  - Import products using a JSON file [NOT IMPLEMENTED]
+  - Encrypt and Decrypt shopify.json with password using 'settings lock' and 'settings unlock'. [NOT IMPLEMENTED]
+
 
 - See Functionality above and help with [NOT IMPLEMENTED] features
 - Test on OSX and Linux (Tested on Windows so far) and report/fix issues
