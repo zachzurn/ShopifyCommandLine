@@ -11,6 +11,7 @@ import (
     "github.com/zachzurn/go_shopify"
     "github.com/fsnotify/fsnotify"
     "github.com/mgutz/ansi"
+    "errors"
 )
 
 
@@ -121,6 +122,7 @@ func (s *Store) watch(){
         os.Exit(1)
     }
 
+    //Checks if a path is a directory or not using stat -- for this use we really could check for no extension but we have to think about it
     isDirectory := func(pth string) (bool, error) {
          fi, err := os.Stat(pth)
          if err != nil {
@@ -131,6 +133,7 @@ func (s *Store) watch(){
     }
 
 
+    //Watches a folder
     watch := func(folder string){
         err = watcher.Add(folder)
         if err != nil {
@@ -139,7 +142,7 @@ func (s *Store) watch(){
         }
     }
 
-
+    //Watches a folder and any folders inside of it
     watchWalk := func(folder string){
         filepath.Walk(folder,func(path string, info os.FileInfo, err error) error {
 
@@ -156,12 +159,34 @@ func (s *Store) watch(){
         })
     }
 
+    //Unwatches a folder
     unwatch := func(folder string){
         err = watcher.Remove(folder)
         if err != nil {
             fmt.Printf("%s  %s\n",StrError, err)
             os.Exit(1)
         }
+    }
+
+    //Filter out ingored files and returns last event
+    getApplicableEvent := func(events []fsnotify.Event) (fsnotify.Event, error) {
+
+        applicableEvents := []fsnotify.Event{}
+
+        for _, e := range events{
+
+            if extensionAllowed(ext(e.Name)) {
+                applicableEvents = append(applicableEvents,e)
+            }
+
+        }
+
+        if len(applicableEvents) > 0 {
+            return applicableEvents[len(applicableEvents)-1], nil
+        }
+
+        return fsnotify.Event{}, errors.New("No applicable events found")
+
     }
 
     defer watcher.Close()
@@ -171,12 +196,18 @@ func (s *Store) watch(){
         for {
             select {
             case events := <-watcher.Events:
-                
-                event := events[len(events)-1]
+
+                event, err := getApplicableEvent(events)
+
+                if err != nil {
+                    break
+                }
+
                 path := event.Name
 
+
                 if event.Op&fsnotify.Create == fsnotify.Create {
-                    if d, _ := isDirectory(event.Name); d{
+                    if d, _ := isDirectory(path); d{
                         //Directory was created, let's watch it
                         watch(path)
                     } else {
@@ -222,7 +253,7 @@ func (s *Store) deleteRemoteAsset(pth string) {
     pth = strings.Replace(pth,`\`,`/`,-1)
     assetKey, err := filepath.Rel(s.Folder, pth)
     assetName := filepath.Base(assetKey)
-    assetExt := filepath.Ext(assetName)
+    assetExt := ext(assetName)
     
     if err != nil{
         
@@ -248,14 +279,16 @@ func (s *Store) uploadLocalAsset(pth string) {
     pth = strings.Replace(pth,`\`,`/`,-1)
     assetKey, err := filepath.Rel(s.Folder, pth)
     assetName := filepath.Base(assetKey)
-    assetExt := filepath.Ext(assetName)
+    assetExt := ext(assetName)
+
+    fmt.Printf("%v %v",StrUploading,assetName)
 
     if err != nil{
         
     } 
 
     if !extensionAllowed(assetExt) {
-        fmt.Printf("%v Extension %v ignored. Add in shopify.json as 'allowed_extensions'.\n%v Allowed -> %v\n",StrWarning,ansi.Color(assetExt, "134"),WarningSpacer,allowedExtensions)
+        fmt.Printf("\r%v Extension %v ignored. Add in shopify.json as 'allowed_extensions'.\n%v Allowed -> %v\n",StrWarning,ansi.Color(assetExt, "134"),WarningSpacer,allowedExtensions)
         return;
     }
 
@@ -266,7 +299,7 @@ func (s *Store) uploadLocalAsset(pth string) {
     file, e := ioutil.ReadFile(pth)
     
     if e != nil {
-        fmt.Printf("%v Couldn't read file. %v\n",StrWarning,pth)
+        fmt.Printf("\r%v Couldn't read file. %v\n",StrWarning,pth)
         return
     }
 
@@ -284,11 +317,11 @@ func (s *Store) uploadLocalAsset(pth string) {
     err = asset.Upload(s.ThemeId)
 
     if err != nil {
-        fmt.Printf("%v Couldn't upload file. %v\n%v %v\n",StrWarning,assetKey,WarningSpacer,err)
+        fmt.Printf("\r%v Couldn't upload file. %v\n%v %v\n",StrWarning,assetKey,WarningSpacer,err)
         return
     }
 
-    fmt.Printf("%v %v\n",StrUploaded,assetName)
+    fmt.Printf("\r%v %v\n",StrUploaded,assetName)
 }
 
 
@@ -345,6 +378,16 @@ func (s *Store) validate(storeKey string){
 
 
 /* UTILITY */
+func ext(path string) string {
+    s := strings.Split(path, ".")
+
+    if len(s) > 0 {
+        return "."+s[len(s)-1]
+    }
+
+    return ""
+}
+
 func extensionAllowed(ext string) bool {
     for _, a := range allowedExtensions {
         if a == ext {
