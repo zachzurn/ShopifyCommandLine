@@ -4,7 +4,7 @@ Go Shopify Tools is a Go project that provides tools for editing assets on shopi
 
 ![go shopify tools](https://github.com/zachzurn/go_shopify_tools/raw/master/img/go_shopify_tools.png)
 
-Functionality
+### Functionality
   - Configure dev, test and staging stores [DONE]
   - Download entire theme [DONE]
   - Watch for file changes and upload to shopify [DONE]
@@ -14,6 +14,10 @@ Functionality
   - Copy products from one store to another [NOT IMPLEMENTED]
   - Import products using a JSON file [NOT IMPLEMENTED]
   - Encrypt and Decrypt shopify.json with password using 'settings lock' and 'settings unlock'. [NOT IMPLEMENTED]
+
+### Download
+
+| [Win](https://github.com/zachzurn/go_shopify_tools/releases/download/v0.1/shopify.exe "Shopify Tools Windows") | --- | [Mac](https://github.com/zachzurn/go_shopify_tools/releases/download/v0.1/shopify "Shopify Tools Windows") |
 
 ### How to use
 
